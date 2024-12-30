@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+    <style>
+        #response-message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <form id="contact-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <!-- <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br> -->
+        <label for="recipientEmail">Recipient Email:</label>
+        <input type="email" id="recipientEmail" name="recipientEmail" required><br><br>
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required></textarea><br><br>
+        <button type="submit">Send</button>
+        <div id="response-message"></div>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $('#contact-form').submit(function(e) {
+                e.preventDefault(); // Prevent form submission
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/send-email',  // Endpoint to send email
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        // Clear all input fields
+                        $('#contact-form')[0].reset();
+
+                        // Display success message below the form
+                        $('#response-message').html('<p style="color: green;">Email sent successfully!</p>');
+                    },
+                    error: function(xhr, status, error) {
+                        // Display error message below the form
+                        $('#response-message').html('<p style="color: red;">Failed to send email: ' + error + '</p>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
